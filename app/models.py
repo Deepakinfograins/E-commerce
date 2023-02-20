@@ -30,31 +30,6 @@ class User(AbstractUser):
 
 
 
-# state_choices = (("Andhra Pradesh","Andhra Pradesh"),("Arunachal Pradesh ","Arunachal Pradesh "),("Assam","Assam"),("Bihar","Bihar"),("Chhattisgarh","Chhattisgarh"),("Goa","Goa"),("Gujarat","Gujarat"),("Haryana","Haryana"),("Himachal Pradesh","Himachal Pradesh"),("Jammu and Kashmir ","Jammu and Kashmir "),("Jharkhand","Jharkhand"),("Karnataka","Karnataka"),("Kerala","Kerala"),("Madhya Pradesh","Madhya Pradesh"),("Maharashtra","Maharashtra"),("Manipur","Manipur"),("Meghalaya","Meghalaya"),("Mizoram","Mizoram"),("Nagaland","Nagaland"),("Odisha","Odisha"),("Punjab","Punjab"),("Rajasthan","Rajasthan"),("Sikkim","Sikkim"),("Tamil Nadu","Tamil Nadu"),("Telangana","Telangana"),("Tripura","Tripura"),("Uttar Pradesh","Uttar Pradesh"),("Uttarakhand","Uttarakhand"),("West Bengal","West Bengal"),("Andaman and Nicobar Islands","Andaman and Nicobar Islands"),("Chandigarh","Chandigarh"),("Dadra and Nagar Haveli","Dadra and Nagar Haveli"),("Daman and Diu","Daman and Diu"),("Lakshadweep","Lakshadweep"),("National Capital Territory of Delhi","National Capital Territory of Delhi"),("Puducherry","Puducherry"))
-
-# class CustomUser(AbstractUser):
-#     username = models.CharField(max_length=256)
-#     email = models.EmailField(unique=True)
-#     mobile = models.CharField(max_length=20)
-#     otp = models.CharField(max_length=6)
-
-#     USERNAME_FIELD = 'email'
-#     REQUIRED_FIELDS = ('username',)
-
-    
-
-#     class Meta:
-#         verbose_name_plural = "User"
-   
-#     def __str__(self):
-#         return str(self.username)
-
-
-
-
-
-
-
 class Customer(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     name=models.CharField(_("name"), max_length=255)
@@ -63,28 +38,22 @@ class Customer(models.Model):
     zipcode=models.IntegerField(_("zipcode"))
     state=models.CharField(_("state"),max_length=255)
     
+    class Meta:
+        verbose_name_plural = "Customer"
+
+
     def __str__(self):
         return str(self.id)
+    
+    
 
-
-# categary_choices=(
-
-#     ('M','Mobile'),
-#     ('L','Laptop'),
-#     ('TW','Top Wear'),
-#     ('BW','Bottom Wear')
-# )
 
 class Category(models.Model):
     category=models.CharField(_("category"), max_length=150)
     def __str__(self):
         return str(self.category)
 
-# class SubCategory(models.Model):
-#     category=models.ForeignKey(Category, on_delete=models.CASCADE)
-#     subcategory=models.CharField(_("subcategory"), max_length=150)
-#     def __str__(self):
-#         return str(self.category)
+
 
 
 class Product(models.Model):
@@ -95,6 +64,9 @@ class Product(models.Model):
     brand=models.CharField(_("brand"),max_length=255)
     category=models.ForeignKey(Category, related_name='pro_cat',on_delete=models.CASCADE)
     product_image=models.ImageField(_("product_image"), upload_to='producting')
+    
+    class Meta:
+        verbose_name_plural = "Product"
 
     def __str__(self):
         return str(self.title)
@@ -108,6 +80,10 @@ class Cart(models.Model):
     product=models.ForeignKey(Product, verbose_name=_("product"), on_delete=models.CASCADE)
     quantity=models.PositiveIntegerField(_("quantity"),default=1)
     
+    class Meta:
+        verbose_name_plural = "Cart"
+
+
     def __str__(self):
         return str(self.id)
 
@@ -129,6 +105,10 @@ class OrderPlace(models.Model):
     quantity=models.PositiveIntegerField(_("quantity"),default=1)
     ordered_date=models.DateTimeField(_("ordered_date"), auto_now_add=True)
     status=models.CharField(_("status"),choices= status_choices,max_length=50,default='Pending')
+    
+    class Meta:
+        verbose_name_plural = "OrderPlace"
+    
     def __str__(self):
         return str(self.id)
     
@@ -136,27 +116,25 @@ class OrderPlace(models.Model):
     def total_cost(self):
         return self.quantity * self.product.discount_price
 
-# class Profile(models.Model):
-#     user = models.OneToOneField(User ,on_delete=models.CASCADE)
-#     mobile = models.CharField(max_length=20)
-#     otp = models.CharField(max_length=6)
-#     def __str__(self):
-#         return str(self.user)
-
-
-#     def get_count(self):
-#         return Cart.objects.filter(user=self.user).count()
-
 class ProductImages(models.Model):
     product=models.ForeignKey(Product, on_delete=models.CASCADE)
     multiple_image=models.ImageField(upload_to='multiple_image')
+
+    class Meta:
+        verbose_name_plural = "ProductImages"
+    
+
     def __str__(self):
         return str(self.product)
 
 
 class Banner(models.Model):
     banner=models.ImageField(upload_to='banner')
+
+    class Meta:
+        verbose_name_plural = "Banner"
+
     def __str__(self):
         return str(self.banner)
-
+  
         

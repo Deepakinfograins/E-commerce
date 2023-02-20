@@ -40,8 +40,7 @@ class ProductDetailView(View):
         totalitem=0
         product=Product.objects.get(id=id)
         productimg=ProductImages.objects.filter(product=product)
-        print(productimg)
-
+      
         Categories = Category.objects.all()
        
         item_already_in_cart = False
@@ -71,9 +70,9 @@ def add_to_cart(request):
         
         user=request.user
         product_id=request.GET.get('pro_id')
-        print(product_id)
+       
         product=Product.objects.get(id=product_id)
-        # Cart(user=user , product=product).save()
+       
         if Cart.objects.filter(product = product).exists():
             return redirect('cart')
         else:
@@ -142,7 +141,7 @@ class MinusCartView(View):
     def get(self, request):
         if request.method =='GET':
             prod_id=request.GET['prod_id']
-            print(prod_id)
+       
             c=Cart.objects.get(Q(product=prod_id) & Q(user=request.user))
     
             c.quantity-=1
@@ -173,7 +172,7 @@ class RemoveCartView(View):
     def get(self, request):
         if request.method =='GET':
             prod_id=request.GET['prod_id']
-            print(prod_id)
+           
             c=Cart.objects.filter(Q(product=prod_id) & Q(user=request.user))
             c.delete()
         
@@ -236,6 +235,7 @@ def orders(request):
     op =OrderPlace.objects.filter(user=request.user)
     if request.user.is_authenticated: 
            totalitem=len(Cart.objects.filter(user=request.user))
+    
     return render(request, 'orders.html',{'order_place':op,'totalitem':totalitem})
 
 
@@ -245,17 +245,17 @@ def change_password(request):
 
 
 
-class MessageHandler:
-    mobile=None 
-    otp=None
-    def __init__(self,mobile,otp) -> None:
-        self.mobile=mobile
-        self.otp=otp
+# class MessageHandler:
+#     mobile=None 
+#     otp=None
+#     def __init__(self,mobile,otp) -> None:
+#         self.mobile=mobile
+#         self.otp=otp
 
-    def send_otp(self):     
-        client= Client(settings.ACCOUNT_SID,settings.AUTH_TOKEN)
-        message=client.messages.create(body=f'your otp is:{self.otp}',from_=f'{settings.TWILIO_PHONE_NUMBER}',to=f'{settings.COUNTRY_CODE}{self.mobile}')
-        return None
+#     def send_otp(self):     
+#         client= Client(settings.ACCOUNT_SID,settings.AUTH_TOKEN)
+#         message=client.messages.create(body=f'your otp is:{self.otp}',from_=f'{settings.TWILIO_PHONE_NUMBER}',to=f'{settings.COUNTRY_CODE}{self.mobile}')
+#         return None
 
 
 def login_attempt(request):
@@ -299,6 +299,7 @@ def login_otp(request):
             return render(request,'login_otp.html' , context)
     
     return render(request,'login_otp.html' , context)
+
     
 def send_otp_via_mail(email):
     subject="Your account varification email"
